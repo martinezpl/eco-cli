@@ -8,9 +8,54 @@ tables_path = os.path.abspath(sys.argv[0] + "/../tables")
 daily_path = tables_path + "/daily.csv"
 sav_path = tables_path + "/savings.csv"
 
-def intro(ctx):
-    choice = inquirer.list_input("Public or private?",
-                              choices=['public', 'private'])
+#TO DO:
+#resolve the issue on income/spendings csv splitting
+#implement functions
+#command mode
+#setup!!
+#GH deploy :) 
+
+def config():
+    choice = inquirer.list_input("", choices=['initialize', 'add source of income', 'add spending category'])
+    if choice == 'initialize':
+        income = inquirer.text(message="Enter your sources of income divided by comma eg. 'job, youtube, crime'")
+        spendings = inquirer.text(message="Enter your spending categories divided by comma eg. food, rent, hobby'")
+        savings = inquirer.text(message="Enter your savings categories divided by comma eg. rent, future, guitar")
+        cats = ['date'] + income.replace(' ', '').split(',') + spendings.replace(' ', '').split(',') + ['in', 'out']
+        pd.DataFrame(columns=cats).to_csv(daily_path, index=False)
+        savs = ['date'] + savings.replace(' ', '').split(',')
+        pd.DataFrame(columns=savs).to_csv(sav_path, index=False)
+        click.secho("You're set my friend!", fg='green')
+    elif choice == 'add source of income':
+        pass
+    elif choice == 'add spending category':
+        pass
+
+def spending(df):
+    choice = inquirer.list_input("",
+            choices=list(df.columns)[1:-2])
+def earning(df):
+    choice = inquirer.list_input("",
+            choices=list(df.columns)[1:-2])
+def saving(df):
+    choice = inquirer.list_input("",
+             choices=list(df.columns)[1:])
+
+def intro():
+    choice = inquirer.list_input("fun fact: mitch caught a body bout a week ago",
+                                choices=['flow', 'config'])
+    if choice == 'flow':
+        choice = inquirer.list_input("I made a new",
+                                    choices=['spending', 'saving', 'earning'])
+        if choice == 'spending':
+            spending(pd.read_csv(daily_path))
+        elif choice == 'earning':
+            earning(pd.read_csv(daily_path))
+        elif choice == 'saving':
+            saving(pd.read_csv(sav_path))
+    elif choice == 'config':
+        config()
+
 
 def flow(f, w, t, b, h, fun, d, l, v, m, fam, o):
     daily = pd.read_csv(daily_path)
@@ -46,12 +91,5 @@ def report():
     click.secho("%s PLN" % week_outcome, blink = True)
 
 if __name__ == "__main__":
-    if not os.path.exists(daily_path) or not os.path.exists(sav_path):
-        if not os.path.exists(tables_path):
-            os.system('mkdir ' + tables_path)
-        b = {"date": [dt.date.today()], "food": [0.0], "water": [0.0], "tickets": [0.0], "bills": [0.0], "hobby": [0.0], "fun": [0.0], "drugs": [0.0], "lessons": [0.0], "video": [0.0], "mix": [0.0], "fam": [0.0], "other": [0.0], "in": [0.0], "out": [0.0]}
-        pd.DataFrame(b).to_csv(daily_path, index = False)
-        c = {"date": [dt.date.today()], "rent": [0.0], "future": [0.0]}
-        pd.DataFrame(c).to_csv(sav_path, index = False)
-
-    report()
+    assert os.path.exists(tables_path), "Have you lost your tables folder?" 
+    intro()
