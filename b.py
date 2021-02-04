@@ -32,7 +32,7 @@ class Eco:
                                         choices=['flow', 'config', 'exit'])
             if choice == 'flow':
                 choice = inquirer.list_input("I made a new",
-                                            choices=['spending', 'saving', 'income'])
+                                            choices=['spending', 'saving', 'income', 'back'])
                 if choice == 'spending':
                     self.spending_df = self.spending_df.append(self.query(self.spending_df.columns), ignore_index=True)
                     self.spending_df.to_csv(self.spending_path, index=False)
@@ -42,6 +42,8 @@ class Eco:
                 elif choice == 'saving': 
                     self.saving_df = self.saving_df.append(self.query(self.saving_df.columns), ignore_index=True)
                     self.saving_df.to_csv(self.saving_path, index=False)
+                elif choice == 'back':
+                    continue
             elif choice == 'config':
                 self.config()
             elif choice == 'exit':
@@ -67,7 +69,7 @@ class Eco:
             elif choice == 'add spending category':
                 pass
             elif choice == 'back':
-                intro()
+                return 0
 
     def query(self, columns):
         new_row = pd.Series(index=columns, dtype='object')
