@@ -3,7 +3,9 @@ import inquirer
 import pandas as pd
 import datetime  as dt
 import sys, os
+
 #TO DO:
+#merging into daily
 #implement functions
 #command mode
 #setup!!
@@ -35,9 +37,11 @@ class Eco:
                     self.spending_df = self.spending_df.append(self.query(self.spending_df.columns), ignore_index=True)
                     self.spending_df.to_csv(self.spending_path, index=False)
                 elif choice == 'income':
-                    self.query(self.income_df.columns)
-                elif choice == 'saving':
-                    self.query(self.saving_df.columns)
+                    self.income_df = self.income_df.append(self.query(self.income_df.columns), ignore_index=True)
+                    self.income_df.to_csv(self.income_path, index=False)
+                elif choice == 'saving': 
+                    self.saving_df = self.saving_df.append(self.query(self.saving_df.columns), ignore_index=True)
+                    self.saving_df.to_csv(self.saving_path, index=False)
             elif choice == 'config':
                 self.config()
             elif choice == 'exit':
