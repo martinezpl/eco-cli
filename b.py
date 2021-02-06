@@ -1,21 +1,33 @@
-import click
 import inquirer
 import pandas as pd
 import datetime  as dt
 import sys, os
 
-#TO DO:
-#update_daily during reports
-#implement functions
-#command mode
-#setup!!
-#GH deploy :) 
-class Eco:
+# WILD IDEAS:
+# external dataframe monitor
+# plots
 
+# TO DO:
+# table modifier
+# structure
+# setup!!
+# GH deploy :) 
+
+class bc:
+    MAGENTA = '\033[95m'
+    BLUE = '\033[94m'
+    CYAN = '\033[96m'
+    GREEN = '\033[92m'
+    YELLOW = '\033[93m'
+    RED = '\033[91m'
+    ENDC = '\033[0m'
+    BOLD = '\033[1m'
+    UNDERLINE = '\033[4m'
+
+class Eco:
     def __init__(self):
         tables_path = os.path.abspath(sys.argv[0] + "/../tables")
         assert os.path.exists(tables_path), "Have you lost your tables folder? Create a new one." 
-        
         self.tables_path = tables_path
         self.income_path = tables_path + "/income.csv"
         self.spendings_path = tables_path + "/spendings.csv"
@@ -26,9 +38,8 @@ class Eco:
             self.spendings_df = pd.read_csv(self.spendings_path)
             self.savings_df = pd.read_csv(self.savings_path)
         except:
-            click.secho("~~~~~~~~ Hi! Let's customize the program to your lifestyle. ~~~~~~~", bold=True, color='blue')
+            print(f"{bc.BOLD}{bc.GREEN}~~~~~~~~ Hi! Let's customize the program to your lifestyle. ~~~~~~~{bc.ENDC}")
             self.initialize()
-        self.intro()
     
     def update_daily(self):
         self.daily_df = pd.concat([self.income_df, self.spendings_df, self.savings_df], 
@@ -42,26 +53,34 @@ class Eco:
     def intro(self):
         while True:
             choice = inquirer.list_input("fun fact: mitch caught a body bout a week ago",
-                                        choices=['flow', 'config', 'exit'])
+                                        choices=['flow', 'summary', 'config', 'exit'])
             if choice == 'flow':
-                while(True):
-                    choice = inquirer.list_input("I made a new",
-                                                choices=['spendings', 'savings', 'income', 'back'])
-                    if choice == 'spendings':
-                        self.spendings_df = self.spendings_df.append(self.query(self.spendings_df.columns), ignore_index=True)
-                        self.spendings_df.to_csv(self.spendings_path, index=False)
-                    elif choice == 'income':
-                        self.income_df = self.income_df.append(self.query(self.income_df.columns), ignore_index=True)
-                        self.income_df.to_csv(self.income_path, index=False)
-                    elif choice == 'savings': 
-                        self.savings_df = self.savings_df.append(self.query(self.savings_df.columns), ignore_index=True)
-                        self.savings_df.to_csv(self.savings_path, index=False)
-                    elif choice == 'back':
-                        break
+                self.flow()
+            elif choice == 'summary':
+                try:
+                    self.summary()
+                except:
+                    print("No entries.")
             elif choice == 'config':
                 self.config()
             elif choice == 'exit':
                 return 0
+
+    def flow(self):
+        while(True):
+            choice = inquirer.list_input("New",
+                                        choices=['spendings', 'savings', 'income', 'back'])
+            if choice == 'spendings':
+                self.spendings_df = self.spendings_df.append(self.query(self.spendings_df.columns), ignore_index=True)
+                self.spendings_df.to_csv(self.spendings_path, index=False)
+            elif choice == 'income':
+                self.income_df = self.income_df.append(self.query(self.income_df.columns), ignore_index=True)
+                self.income_df.to_csv(self.income_path, index=False)
+            elif choice == 'savings': 
+                self.savings_df = self.savings_df.append(self.query(self.savings_df.columns), ignore_index=True)
+                self.savings_df.to_csv(self.savings_path, index=False)
+            elif choice == 'back':
+                return
 
     def initialize(self):
         income = inquirer.text(message="First, enter your sources of income divided by comma eg. job, freelance, crime")
@@ -74,7 +93,8 @@ class Eco:
         pd.DataFrame(columns=spendings_cats).to_csv(self.spendings_path, index=False)
         pd.DataFrame(columns=sav_cats).to_csv(self.savings_path, index=False)
         pd.DataFrame().to_csv(self.daily_path, index=False)
-        click.secho("You're set my friend!", fg='green')
+        self.__init__()
+        print(f"{bc.UNDERLINE}{bc.GREEN}You're set my friend!{bc.ENDC}\n")
 
     def config(self):
         while(True):
@@ -107,38 +127,33 @@ class Eco:
             return new_row
         return
 
-    def flow(f, w, t, b, h, fun, d, l, v, m, fam, o):
-        daily = pd.read_csv(daily_path)
-        earned = round(float(l + v + m + fam + o), 2)
-        spent = round(float(f + w + t + b + h + fun + d), 2)
-        data = pd.Series([dt.date.today().strftime("%d/%m/%y"), f, w, t, b, h, fun, d, l, v, m, fam, o, earned, spent], index=daily.columns)
-        daily.append(data, ignore_index=True).to_csv(daily_path, index = False)
-
-    def save(r, f):
-        df = pd.read_csv(savings_path)
-        data = pd.Series([dt.date.today().strftime("%d/%m/%y"), r, f])
-        df.append(data, ignore_index=True).to_csv(savings_path, index = False)
-
-    def report():
-        df = pd.read_csv(daily_path)
-        sav = pd.read_csv(savings_path)
+    def summary(self):
+        self.update_daily()
         last_week_dates = [(dt.date.today() - dt.timedelta(days=x)).strftime("%d/%m/%y") for x in list(range(0, 7))]
-        mask = df.date.apply(lambda x: any(date for date in last_week_dates if date in x))
-        week = df[mask]
-        week_income = week["in"].sum()
-        week_outcome = week["out"].sum()
-        savings = sav['rent'].sum() + sav['future'].sum()
-        print(week)
-        click.secho("SAVINGS:", fg='yellow')
-        click.echo("RENT: %s PLN            FUTURE: %s PLN" % (sav['rent'].sum(), sav['future'].sum()))
-        click.secho("WALLET:", fg='cyan')
-        click.echo("%s PLN" % round((week_income - week_outcome - savings), 2))
-        click.secho("\nLast 7 days:", bold=True)
-        click.echo("----------------------------------------------")
-        click.secho("INCOME:", fg='green')
-        click.secho("%s PLN" % week_income, blink = True)
-        click.secho("SPENT:", fg='red')
-        click.secho("%s PLN" % week_outcome, blink = True)
+        last_week = self.daily_df[self.daily_df.date.apply(lambda x: any(date for date in last_week_dates if date in x))]
+        this_month = self.daily_df.loc[self.daily_df.date.str.contains(dt.date.today().strftime("%m/%y"))]
+        print("============================================================================================")
+        print(last_week)
+        print("============================================================================================")
+        print(f"{bc.BOLD}{bc.MAGENTA}WALLET:{bc.ENDC} {round((self.daily_df['in'].sum() - self.daily_df['out'].sum() - self.daily_df['saved'].sum()), 2)} PLN\n")
+        print(f"{bc.BOLD}\nLast 7 days:{bc.ENDC}")
+        print("------------------------------------------------------------------------------")
+        print(f"{bc.BOLD}{bc.CYAN}EARNED:{bc.ENDC} {last_week['in'].sum()} PLN\t|\t",
+                f"{bc.BOLD}{bc.RED}SPENT:{bc.ENDC} {last_week['out'].sum()} PLN\t|\t",
+                f"{bc.BOLD}{bc.GREEN}SAVED:{bc.ENDC} {last_week['saved'].sum()} PLN")
+        
+        print(f"{bc.BOLD}\nThis month:{bc.ENDC}")
+        print("------------------------------------------------------------------------------")
+        print(f"{bc.BOLD}{bc.CYAN}EARNED:{bc.ENDC} {this_month['in'].sum()} PLN\t|\t",
+                f"{bc.BOLD}{bc.RED}SPENT:{bc.ENDC} {this_month['out'].sum()} PLN\t|\t",
+                f"{bc.BOLD}{bc.GREEN}SAVED:{bc.ENDC} {this_month['saved'].sum()} PLN")
+       
+        print(f"{bc.BOLD}\nOverall:{bc.ENDC}")
+        print("------------------------------------------------------------------------------")
+        print(f"{bc.BOLD}{bc.CYAN}EARNED:{bc.ENDC} {self.daily_df['in'].sum()} PLN\t|\t",
+                f"{bc.BOLD}{bc.RED}SPENT:{bc.ENDC} {self.daily_df['out'].sum()} PLN\t|\t",
+                f"{bc.BOLD}{bc.GREEN}SAVED:{bc.ENDC} {self.daily_df['saved'].sum()} PLN\n")
+        input()
 
 if __name__ == "__main__":
-    Eco()
+    Eco().intro()
