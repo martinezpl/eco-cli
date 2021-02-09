@@ -1,4 +1,5 @@
 import inquirer
+import numpy as np
 import pandas as pd
 import datetime  as dt
 import sys, os
@@ -8,7 +9,6 @@ import sys, os
 # plots
 
 # TO DO:
-# table modifier
 # structure
 # setup!!
 # GH deploy :) 
@@ -37,6 +37,7 @@ class Eco:
             self.income_df = pd.read_csv(self.income_path)
             self.spendings_df = pd.read_csv(self.spendings_path)
             self.savings_df = pd.read_csv(self.savings_path)
+            self.update_daily()
         except:
             print(f"{bc.BOLD}{bc.GREEN}~~~~~~~~ Hi! Let's customize the program to your lifestyle. ~~~~~~~{bc.ENDC}")
             self.initialize()
@@ -51,34 +52,44 @@ class Eco:
         self.daily_df.to_csv(self.daily_path, index=False)
 
     def intro(self):
+        last_choice = None
         while True:
             choice = inquirer.list_input("fun fact: mitch caught a body bout a week ago",
-                                        choices=['flow', 'summary', 'config', 'exit'])
+                                        choices=['flow', 'summary', 'config', 'exit'],
+                                        default=last_choice)
             if choice == 'flow':
                 self.flow()
+                last_choice = 'flow'
             elif choice == 'summary':
                 try:
                     self.summary()
                 except:
                     print("No entries.")
+                last_choice = choice
             elif choice == 'config':
                 self.config()
+                last_choice = choice
             elif choice == 'exit':
                 return 0
 
     def flow(self):
+        last_choice = None
         while(True):
             choice = inquirer.list_input("New",
-                                        choices=['spendings', 'savings', 'income', 'back'])
+                                        choices=['spendings', 'savings', 'income', 'back'],
+                                        default = last_choice)
             if choice == 'spendings':
                 self.spendings_df = self.spendings_df.append(self.query(self.spendings_df.columns), ignore_index=True)
                 self.spendings_df.to_csv(self.spendings_path, index=False)
+                last_choice = choice
             elif choice == 'income':
                 self.income_df = self.income_df.append(self.query(self.income_df.columns), ignore_index=True)
                 self.income_df.to_csv(self.income_path, index=False)
+                last_choice = choice
             elif choice == 'savings': 
                 self.savings_df = self.savings_df.append(self.query(self.savings_df.columns), ignore_index=True)
                 self.savings_df.to_csv(self.savings_path, index=False)
+                last_choice = choice
             elif choice == 'back':
                 return
 
@@ -92,27 +103,53 @@ class Eco:
         pd.DataFrame(columns=income_cats).to_csv(self.income_path, index=False)
         pd.DataFrame(columns=spendings_cats).to_csv(self.spendings_path, index=False)
         pd.DataFrame(columns=sav_cats).to_csv(self.savings_path, index=False)
-        pd.DataFrame().to_csv(self.daily_path, index=False)
         self.__init__()
         print(f"{bc.UNDERLINE}{bc.GREEN}You're set my friend!{bc.ENDC}\n")
+        input()
+
+    def modify(self, df, path):
+        while(True):
+            columns = df.columns
+            choice = inquirer.list_input("Remove",
+                    choices=['add'] + list(columns)[1:-1] + ['back'])
+            if choice == 'add':
+                new_column = inquirer.text(message = 'Title')
+                df.insert(loc = 1, column=new_column, value = 0)
+                df.to_csv(path, index=False)
+            elif choice == 'back':
+                break
+            else:
+                df = df.drop(choice, axis=1)
+                df.to_csv(path, index=False)
+        return df
 
     def config(self):
+        last_choice = None
         while(True):
-            choice = inquirer.list_input("", choices=['initialize', 'add source of income', 'add spendings category', 'back'])
+            choice = inquirer.list_input("", choices=['initialize', 'modify sources of income', 'modify spending categories', 'modify saving categories', 'back'],
+                                        default = last_choice)
             if choice == 'initialize':
-                self.initialize()    
-            elif choice == 'add source of income':
-                pass
-            elif choice == 'add spendings category':
-                pass
+                self.initialize()
+                break
+            elif choice == 'modify sources of income':
+                self.income_df = self.modify(self.income_df, self.income_path)
+                last_choice = choice
+            elif choice == 'modify spending categories':
+                self.spendings_df = self.modify(self.spendings_df, self.spendings_path)
+                last_choice = choice
+            elif choice == 'modify saving categories':
+                self.savings_df = self.modify(self.savings_df, self.savings_path)
+                last_choice = choice
             elif choice == 'back':
                 return 0
 
     def query(self, columns):
         new_row = pd.Series(index=columns, dtype='object')
+        last_choice = None
         while(True):
             choice = inquirer.list_input("",
-                    choices=list(columns)[1:-1] + ['back'])
+                    choices=list(columns)[1:-1] + ['back'],
+                    default = last_choice)
             if choice == 'back':
                 break    
             else:
@@ -121,6 +158,7 @@ class Eco:
                     new_row.at[choice] = amount
                 except:
                     print("Don't be naughty!")
+                last_choice = choice
         if new_row.notna().any():
             new_row.at['sum'] = new_row.sum()
             new_row.at['date'] = dt.date.today().strftime("%d/%m/%y")
@@ -129,6 +167,7 @@ class Eco:
 
     def summary(self):
         self.update_daily()
+        assert self.daily_df.shape[0] > 0
         last_week_dates = [(dt.date.today() - dt.timedelta(days=x)).strftime("%d/%m/%y") for x in list(range(0, 7))]
         last_week = self.daily_df[self.daily_df.date.apply(lambda x: any(date for date in last_week_dates if date in x))]
         this_month = self.daily_df.loc[self.daily_df.date.str.contains(dt.date.today().strftime("%m/%y"))]
