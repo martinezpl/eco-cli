@@ -1,5 +1,4 @@
 import pandas as pd
-import inquirer
 import datetime as dt
 
 def query(df):
@@ -52,4 +51,5 @@ def new_eco_df(columns_str=None, csv_path=None):
     if csv_path:
         df.to_csv(csv_path, index=False)
     return df
+
 

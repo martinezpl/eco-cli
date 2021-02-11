@@ -2,19 +2,14 @@ import inquirer
 import pandas as pd
 import datetime  as dt
 import sys, os
-from eco_utils import query, modify, new_row_query, new_eco_df
-import utils.ANSI_escape_codes as ec
-
+from eco.eco_utils import query, modify, new_row_query, new_eco_df
+from eco.utils import ANSI_escape_codes as ec
 # WILD IDEAS:
 # external dataframe monitor
 # plots
-
-# TO DO:
-# setup!!
-# GH deploy :) 
-
 class Eco:
     def __init__(self):
+        print(sys.argv[0])
         tables_path = os.path.abspath(sys.argv[0] + "/../tables")
         assert os.path.exists(tables_path), "Have you lost your tables folder? Create a new one." 
         self.tables_path = tables_path
@@ -134,5 +129,8 @@ class Eco:
                 f"{ec.BOLD}{ec.GREEN}SAVED:{ec.ENDC} {self.daily_df['saved'].sum()} PLN\n")
         input("Continue...")
 
-if __name__ == "__main__":
+def main():
     Eco().intro()
+
+if __name__ == "__main__":
+    main()
