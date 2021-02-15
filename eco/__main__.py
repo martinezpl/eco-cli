@@ -4,14 +4,16 @@ import datetime  as dt
 import sys, os
 from eco.eco_utils import query, modify, new_row_query, new_eco_df
 from eco.eco_utils import ANSI_escape_codes as ec
+import pkg_resources
+
 # WILD IDEAS:
 # external dataframe monitor
 # plots
+
 class Eco:
     def __init__(self):
-        print(sys.argv[0])
-        tables_path = os.path.abspath(sys.argv[0] + "/../tables")
-        assert os.path.exists(tables_path), "Have you lost your tables folder? Create a new one." 
+        tables_path = pkg_resources.resource_filename("eco", "tables/")
+        print(tables_path)
         self.tables_path = tables_path
         self.income_path = tables_path + "/income.csv"
         self.spendings_path = tables_path + "/spendings.csv"

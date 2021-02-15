@@ -1,5 +1,6 @@
 import pandas as pd
 import datetime as dt
+import inquirer
 
 class ANSI_escape_codes():
     MAGENTA = '\033[95m'
