@@ -3,7 +3,7 @@ import pandas as pd
 import datetime  as dt
 import sys, os
 from eco.eco_utils import query, modify, new_row_query, new_eco_df
-from eco.utils import ANSI_escape_codes as ec
+from eco.eco_utils import ANSI_escape_codes as ec
 # WILD IDEAS:
 # external dataframe monitor
 # plots

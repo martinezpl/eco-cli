@@ -2,8 +2,8 @@ from setuptools import setup, find_packages
 
 setup(
     name='eco-cli',
-    version='0.1.4',
-    packages=find_packages(),
+    version='1.0.0',
+    packages=["eco"],
     install_requires=['pandas', 'inquirer'],
     url='https://github.com/martinezpl/eco-cli',
     license='MIT',
@@ -12,6 +12,6 @@ setup(
     description='A CLI tool for personal finance management',
     entry_points= {
         'console_scripts': 
-        ['eco=eco.main:main']},
+        ['eco=eco.__main__:main']},
     include_package_data = True
 )
