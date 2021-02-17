@@ -2,7 +2,7 @@ import inquirer
 import pandas as pd
 import datetime  as dt
 import sys, os
-from eco.eco_utils import query, modify, new_row_query, new_eco_df
+from eco.eco_utils import query, modify, new_row_query, new_eco_df, init_prompt
 from eco.eco_utils import ANSI_escape_codes as ec
 import pkg_resources
 
@@ -13,7 +13,6 @@ import pkg_resources
 class Eco:
     def __init__(self):
         tables_path = pkg_resources.resource_filename("eco", "tables/")
-        print(tables_path)
         self.tables_path = tables_path
         self.income_path = tables_path + "/income.csv"
         self.spendings_path = tables_path + "/spendings.csv"
@@ -79,9 +78,15 @@ class Eco:
             last_choice = choice 
     
     def initialize(self):
-        income = inquirer.text(message="First, enter your sources of income divided by comma eg. job, freelance, crime")
-        spendings = inquirer.text(message="Now, enter your spending categories divided by comma eg. food, bills, hobby")
-        savings = inquirer.text(message="Lastly, enter your saving categories divided by comma eg. rent, future, guitar")
+        income = []
+        spendings = []
+        savings = []
+        print("First, enter your sources of income eg. job, freelance, crime")
+        income = init_prompt(income) 
+        print("Now, enter your spending categories eg. food, bills, hobby")
+        spendings = init_prompt(spendings)
+        print("Lastly, enter your saving categories eg. rent, future, guitar")
+        savings = init_prompt(savings)
         self.income_df = new_eco_df(income, self.income_path)
         self.spendings_df = new_eco_df(spendings, self.spendings_path)
         self.savings_df = new_eco_df(savings, self.savings_path)
