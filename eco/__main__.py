@@ -2,7 +2,7 @@ import inquirer
 import pandas as pd
 import datetime  as dt
 import sys, os
-from eco.eco_utils import query, modify, new_row_query, new_eco_df, init_prompt
+from eco.eco_utils import query, modify, new_row_query, new_eco_df, init_prompt, get_fun_fact
 from eco.eco_utils import ANSI_escape_codes as ec
 import pkg_resources
 
@@ -18,6 +18,7 @@ class Eco:
         self.spendings_path = tables_path + "/spendings.csv"
         self.savings_path = tables_path + "/savings.csv"
         self.daily_path = tables_path + "/daily.csv"
+        self.fun_fact = get_fun_fact(dt.date.today().strftime("%d/%m/%y"), tables_path)
         try:
             self.income_df = pd.read_csv(self.income_path)
             self.spendings_df = pd.read_csv(self.spendings_path)
@@ -29,8 +30,9 @@ class Eco:
     
     def intro(self):
         last_choice = None
+        print(f"{ec.GREEN}{dt.date.today().strftime('%d/%m/%y')}{ec.ENDC}\n" + self.fun_fact)
         while True:
-            choice = inquirer.list_input("fun fact: mitch caught a body bout a week ago",
+            choice = inquirer.list_input("",
                                         choices=['flow', 'summary', 'config', 'exit'],
                                         default=last_choice)
             if choice == 'flow':
@@ -81,11 +83,11 @@ class Eco:
         income = []
         spendings = []
         savings = []
-        print("First, enter your sources of income eg. job, freelance, crime")
+        print(f"{ec.BOLD}First, enter your sources of {ec.CYAN}income{ec.ENDC}{ec.BOLD} eg. job, freelance, crime{ec.ENDC}")
         income = init_prompt(income) 
-        print("Now, enter your spending categories eg. food, bills, hobby")
+        print(f"{ec.BOLD}Now, enter your {ec.RED}spending{ec.ENDC}{ec.BOLD} categories eg. food, bills, hobby{ec.ENDC}")
         spendings = init_prompt(spendings)
-        print("Lastly, enter your saving categories eg. rent, future, guitar")
+        print(f"{ec.BOLD}Lastly, enter your {ec.GREEN}saving{ec.ENDC}{ec.BOLD} categories eg. rent, future, guitar{ec.ENDC}")
         savings = init_prompt(savings)
         self.income_df = new_eco_df(income, self.income_path)
         self.spendings_df = new_eco_df(spendings, self.spendings_path)
