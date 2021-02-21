@@ -78,16 +78,3 @@ def new_eco_df(columns_arr=None, csv_path=None):
         df.to_csv(csv_path, index=False)
     return df
 
-def get_fun_fact(date, path):
-    f = open(path + '/appdata.json', 'r')
-    data = json.load(f)
-    if data['fun_fact']['date'] != date:
-        new_fun_fact = scrap_fun_fact()
-        if new_fun_fact != "failed":
-            f.close()
-            f = open(path + '/appdata.json', 'w')
-            data['fun_fact']['fact'] = scrap_fun_fact()
-            data['fun_fact']['date'] = dt.date.today().strftime("%d/%m/%y")
-            json.dump(data, f)
-    f.close()
-    return data['fun_fact']['fact']

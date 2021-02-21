@@ -2,9 +2,9 @@ import inquirer
 import pandas as pd
 import datetime  as dt
 import sys, os
-from eco.eco_utils import query, modify, new_row_query, new_eco_df, init_prompt, get_fun_fact
+from eco.eco_utils import query, modify, new_row_query, new_eco_df, init_prompt
 from eco.eco_utils import ANSI_escape_codes as ec
-import pkg_resources
+from pathlib import Path
 
 # WILD IDEAS:
 # external dataframe monitor
@@ -12,13 +12,16 @@ import pkg_resources
 
 class Eco:
     def __init__(self):
-        tables_path = pkg_resources.resource_filename("eco", "tables/")
+        tables_path = str(Path.home()) + "/eco_tables"
+        if not os.path.exists(tables_path):
+            os.mkdir(tables_path)
         self.tables_path = tables_path
         self.income_path = tables_path + "/income.csv"
         self.spendings_path = tables_path + "/spendings.csv"
         self.savings_path = tables_path + "/savings.csv"
         self.daily_path = tables_path + "/daily.csv"
-        self.fun_fact = get_fun_fact(dt.date.today().strftime("%d/%m/%y"), tables_path)
+        #print("Loading...")
+        #self.fun_fact = get_fun_fact(dt.date.today().strftime("%d/%m/%y"), tables_path)
         try:
             self.income_df = pd.read_csv(self.income_path)
             self.spendings_df = pd.read_csv(self.spendings_path)
@@ -30,7 +33,7 @@ class Eco:
     
     def intro(self):
         last_choice = None
-        print(f"{ec.GREEN}{dt.date.today().strftime('%d/%m/%y')}{ec.ENDC}\n" + self.fun_fact)
+        #print(f"{ec.GREEN}{dt.date.today().strftime('%d/%m/%y')}{ec.ENDC}\n" + self.fun_fact)
         while True:
             choice = inquirer.list_input("",
                                         choices=['flow', 'summary', 'config', 'exit'],
