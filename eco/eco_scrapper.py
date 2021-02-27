@@ -10,4 +10,4 @@ def scrap_fun_fact():
         fun_fact = soup.find('main', class_='content').get_text().split('\n')[6]
         return fun_fact
     except:
-        return "failed"
+        return "<connection failed>"

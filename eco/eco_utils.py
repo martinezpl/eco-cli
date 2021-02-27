@@ -1,8 +1,9 @@
+#27
+#In Michigan, You’re Never Further than Six Miles from a Body of Water
 import pandas as pd
 import datetime as dt
 import inquirer
 from eco.eco_scrapper import scrap_fun_fact
-import json
 
 class ANSI_escape_codes():
     MAGENTA = '\033[95m'
@@ -78,3 +79,19 @@ def new_eco_df(columns_arr=None, csv_path=None):
         df.to_csv(csv_path, index=False)
     return df
 
+def get_fun_fact():
+    day = ""
+    fact = ""
+    content = ""
+    with open(__file__, 'r') as f:
+        content = f.readlines()
+        day = content[0][1:].strip()
+        fact = content[1][1:].strip()
+    if day != str(dt.date.today().day) or fact == "<connection failed>":
+        print("Coming up with a fun fact...")
+        fact = scrap_fun_fact()
+        with open(__file__, 'w') as f:
+            content[0] = "#" + str(dt.date.today().day) + "\n"
+            content[1] = "#" + fact + "\n"
+            f.writelines(content)
+    return fact

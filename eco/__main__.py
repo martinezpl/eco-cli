@@ -2,7 +2,7 @@ import inquirer
 import pandas as pd
 import datetime  as dt
 import sys, os
-from eco.eco_utils import query, modify, new_row_query, new_eco_df, init_prompt
+from eco.eco_utils import get_fun_fact, query, modify, new_row_query, new_eco_df, init_prompt
 from eco.eco_utils import ANSI_escape_codes as ec
 from pathlib import Path
 
@@ -20,8 +20,7 @@ class Eco:
         self.spendings_path = tables_path + "/spendings.csv"
         self.savings_path = tables_path + "/savings.csv"
         self.daily_path = tables_path + "/daily.csv"
-        #print("Loading...")
-        #self.fun_fact = get_fun_fact(dt.date.today().strftime("%d/%m/%y"), tables_path)
+        self.fun_fact = get_fun_fact()
         try:
             self.income_df = pd.read_csv(self.income_path)
             self.spendings_df = pd.read_csv(self.spendings_path)
@@ -33,7 +32,7 @@ class Eco:
     
     def intro(self):
         last_choice = None
-        #print(f"{ec.GREEN}{dt.date.today().strftime('%d/%m/%y')}{ec.ENDC}\n" + self.fun_fact)
+        print(f"{ec.GREEN}{dt.date.today().strftime('%d/%m/%y')}{ec.ENDC}\n" + self.fun_fact)
         while True:
             choice = inquirer.list_input("",
                                         choices=['flow', 'summary', 'config', 'exit'],

@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='eco-cli',
-    version='1.2.3',
+    version='1.3.0',
     packages=["eco"],
     install_requires=['pandas', 'inquirer', 'bs4'],
     url='https://github.com/martinezpl/eco-cli',
