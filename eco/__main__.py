@@ -104,6 +104,7 @@ class Eco:
         self.daily_df['in'] = self.income_df[['date', 'sum']].groupby('date').transform('sum')
         self.daily_df['out'] = self.spendings_df[['date', 'sum']].groupby('date').transform('sum')
         self.daily_df['saved'] = self.savings_df[['date', 'sum']].groupby('date').transform('sum')
+        self.daily_df = self.daily_df.fillna(0)
         self.daily_df.to_csv(self.daily_path, index=False)
 
     def summary(self):
