@@ -4,9 +4,7 @@
 
 <img src="https://user-images.githubusercontent.com/64603095/109705701-58cce300-7b98-11eb-84cd-6eb0e73686d6.png" width="600" height="300" />
 
-It provides a quick way to record your money flow through a simple interface. 
-
-The records are arranged & kept in neat tables that are being stored in your local `$HOME/eco_tables` path. 
+It provides a quick way to record your money flow through a simple interface. The records are arranged & kept in neat tables that are being stored in your local `$HOME/eco_tables` path. 
 
 Also, `eco` scraps a daily fun-fact to add a bit of motivation towards regular usage :) So:
 
