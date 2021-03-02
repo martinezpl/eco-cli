@@ -6,12 +6,7 @@
 
 It provides a quick way to record your money flow through a simple interface. The records are arranged & kept in neat tables that are being stored in your local `$HOME/eco_tables` path. 
 
-Also, `eco` scraps a daily fun-fact to add a bit of motivation towards regular usage :) So:
-
-1. Categorize your budget flow across income-spending-saving trio.  
-2. Spend 30 seconds an evening to keep an eye on your pocket!
-
-Yup. That's all it takes to start being an adult.
+It takes about a minute an evening to keep your budget updated. Also, `eco` scraps a daily fun-fact to add a bit of motivation towards regular usage :) 
 
 ## Installation
 
