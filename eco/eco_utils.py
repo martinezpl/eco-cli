@@ -1,5 +1,6 @@
 #27
 #In Michigan, You’re Never Further than Six Miles from a Body of Water
+
 import pandas as pd
 import datetime as dt
 import inquirer
@@ -95,3 +96,16 @@ def get_fun_fact():
             content[1] = "#" + fact + "\n"
             f.writelines(content)
     return fact
+
+def get_currency():
+    with open(__file__, 'r') as f:
+        return f.readlines()[2][1:].strip()
+
+def set_currency(cur):
+    content = ""
+    with open(__file__, 'r') as f:
+        content = f.readlines()
+    with open(__file__, 'w') as f:
+        content[2] = "#" + cur
+        f.writelines(content)
+    return

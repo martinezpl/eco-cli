@@ -2,8 +2,8 @@ import inquirer
 import pandas as pd
 import datetime  as dt
 import sys, os
-from eco.eco_utils import get_fun_fact, query, modify, new_row_query, new_eco_df, init_prompt
-from eco.eco_utils import ANSI_escape_codes as ec
+from eco_utils import get_fun_fact, query, modify, new_row_query, new_eco_df, init_prompt, get_currency, set_currency
+from eco_utils import ANSI_escape_codes as ec
 from pathlib import Path
 
 # WILD IDEAS:
@@ -21,6 +21,7 @@ class Eco:
         self.savings_path = tables_path + "/savings.csv"
         self.daily_path = tables_path + "/daily.csv"
         self.fun_fact = get_fun_fact()
+        self.currency = get_currency()
         try:
             self.income_df = pd.read_csv(self.income_path)
             self.spendings_df = pd.read_csv(self.spendings_path)
@@ -94,6 +95,9 @@ class Eco:
         self.income_df = new_eco_df(income, self.income_path)
         self.spendings_df = new_eco_df(spendings, self.spendings_path)
         self.savings_df = new_eco_df(savings, self.savings_path)
+        print(f"{ec.BOLD}What is your currency? (EUR, GBP, PLN etc...){ec.ENDC}")
+        set_currency(input())
+        self.currency = get_currency()
         print(f"{ec.UNDERLINE}{ec.GREEN}You're set my friend!{ec.ENDC}\n")
         input("Continue...")
 
@@ -121,24 +125,24 @@ class Eco:
         print("============================================================================================")
         print(last_week)
         print("============================================================================================")
-        print(f"{ec.BOLD}{ec.MAGENTA}WALLET:{ec.ENDC} {round((self.daily_df['in'].sum() - self.daily_df['out'].sum() - self.daily_df['saved'].sum()), 2)} PLN\n")
+        print(f"{ec.BOLD}{ec.MAGENTA}WALLET:{ec.ENDC} {round((self.daily_df['in'].sum() - self.daily_df['out'].sum() - self.daily_df['saved'].sum()), 2)} {self.currency}\n")
         print(f"{ec.BOLD}\nLast 7 days:{ec.ENDC}")
         print("------------------------------------------------------------------------------")
-        print(f"{ec.BOLD}{ec.CYAN}EARNED:{ec.ENDC} {last_week['in'].sum()} PLN\t|\t",
-                f"{ec.BOLD}{ec.RED}SPENT:{ec.ENDC} {last_week['out'].sum()} PLN\t|\t",
-                f"{ec.BOLD}{ec.GREEN}SAVED:{ec.ENDC} {last_week['saved'].sum()} PLN")
+        print(f"{ec.BOLD}{ec.CYAN}EARNED:{ec.ENDC} {last_week['in'].sum()} {self.currency}\t|\t",
+                f"{ec.BOLD}{ec.RED}SPENT:{ec.ENDC} {last_week['out'].sum()} {self.currency}\t|\t",
+                f"{ec.BOLD}{ec.GREEN}SAVED:{ec.ENDC} {last_week['saved'].sum()} {self.currency}")
         
         print(f"{ec.BOLD}\nThis month:{ec.ENDC}")
         print("------------------------------------------------------------------------------")
-        print(f"{ec.BOLD}{ec.CYAN}EARNED:{ec.ENDC} {this_month['in'].sum()} PLN\t|\t",
-                f"{ec.BOLD}{ec.RED}SPENT:{ec.ENDC} {this_month['out'].sum()} PLN\t|\t",
-                f"{ec.BOLD}{ec.GREEN}SAVED:{ec.ENDC} {this_month['saved'].sum()} PLN")
+        print(f"{ec.BOLD}{ec.CYAN}EARNED:{ec.ENDC} {this_month['in'].sum()} {self.currency}\t|\t",
+                f"{ec.BOLD}{ec.RED}SPENT:{ec.ENDC} {this_month['out'].sum()} {self.currency}\t|\t",
+                f"{ec.BOLD}{ec.GREEN}SAVED:{ec.ENDC} {this_month['saved'].sum()} {self.currency}")
        
         print(f"{ec.BOLD}\nOverall:{ec.ENDC}")
         print("------------------------------------------------------------------------------")
-        print(f"{ec.BOLD}{ec.CYAN}EARNED:{ec.ENDC} {self.daily_df['in'].sum()} PLN\t|\t",
-                f"{ec.BOLD}{ec.RED}SPENT:{ec.ENDC} {self.daily_df['out'].sum()} PLN\t|\t",
-                f"{ec.BOLD}{ec.GREEN}SAVED:{ec.ENDC} {self.daily_df['saved'].sum()} PLN\n")
+        print(f"{ec.BOLD}{ec.CYAN}EARNED:{ec.ENDC} {self.daily_df['in'].sum()} {self.currency}\t|\t",
+                f"{ec.BOLD}{ec.RED}SPENT:{ec.ENDC} {self.daily_df['out'].sum()} {self.currency}\t|\t",
+                f"{ec.BOLD}{ec.GREEN}SAVED:{ec.ENDC} {self.daily_df['saved'].sum()} {self.currency}\n")
         input("Continue...")
 
 def main():
