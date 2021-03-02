@@ -1,5 +1,6 @@
-#27
-#In Michigan, You’re Never Further than Six Miles from a Body of Water
+#2
+#The average American dog will cost its owner $20,000 in its lifetime.
+#essa
 
 import pandas as pd
 import datetime as dt
@@ -106,6 +107,6 @@ def set_currency(cur):
     with open(__file__, 'r') as f:
         content = f.readlines()
     with open(__file__, 'w') as f:
-        content[2] = "#" + cur
+        content[2] = "#" + cur + "\n"
         f.writelines(content)
     return

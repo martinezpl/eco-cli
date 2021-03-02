@@ -2,8 +2,8 @@ import inquirer
 import pandas as pd
 import datetime  as dt
 import sys, os
-from eco_utils import get_fun_fact, query, modify, new_row_query, new_eco_df, init_prompt, get_currency, set_currency
-from eco_utils import ANSI_escape_codes as ec
+from eco.eco_utils import get_fun_fact, query, modify, new_row_query, new_eco_df, init_prompt, get_currency, set_currency
+from eco.eco_utils import ANSI_escape_codes as ec
 from pathlib import Path
 
 # WILD IDEAS:
