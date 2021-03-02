@@ -19,7 +19,7 @@ Before installing, make sure you've added `pip` to your local __environment vari
 
 Simply type in `eco` in your terminal to invoke the program. First run will initialize a personalization process, in which you'll create flow categories. 
 
-Use *flow* to register money flow. You can use *summary* for a quick budget peek, or export the .csv files under `$HOME/eco_tables` to your tabular software of choice.  
+Use *flow* to register money flow. You can use *summary* for a quick budget peek, or export the .csv files under `$HOME/eco_tables` to your tabular software of choice for a closer inspection.  
 
 ![summary](https://user-images.githubusercontent.com/64603095/109706318-1657d600-7b99-11eb-8e29-cc45b16cf334.png)
 
