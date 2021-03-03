@@ -29,6 +29,8 @@ Hints:
 
 - The three, main categories are a rolling sum (*running total*). Therefore, think of a saving category as of a sock. When you use your saved up money, you take the money out of the sock, so you **update the saving category with a negative number**. If you spent it - you register the amount taken as a spending. If you allocated it in a different sock - you update the right saving category.
 
+- If you delete a category, its previous records remain included in the sums.
+
 ![summary](https://user-images.githubusercontent.com/64603095/109706318-1657d600-7b99-11eb-8e29-cc45b16cf334.png)
 
 
