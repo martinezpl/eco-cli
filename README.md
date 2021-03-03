@@ -27,7 +27,7 @@ Hints:
 
 - Register income, before you register a saving.
 
-- The categories are constantly summed up, so when you use your saved up money, you should update the saving category with the amount as a negative number and register that amount as a spending.
+- The three, main categories are a rolling sum (*running total*). Therefore, think of a saving category as of a sock. When you use your saved up money, you take the money out of the sock, so you **update the saving category with a negative number**. If you spent it - you register the amount taken as a spending. If you allocated it in a different sock - you update the right saving category.
 
 ![summary](https://user-images.githubusercontent.com/64603095/109706318-1657d600-7b99-11eb-8e29-cc45b16cf334.png)
 
