@@ -23,11 +23,11 @@ Use *flow* to register money flow. You can use *summary* for a quick budget peek
 
 Hints:
 
-> __WALLET__ = *income - spendings - savings*
+- __WALLET__ = *income - spendings - savings*
 
-> Register income, before you register a saving.
+- Register income, before you register a saving.
 
-> The categories are constantly summed up, so when you use your saved up money, you should update the saving category with the amount as a negative number and register that amount as a spending.
+- The categories are constantly summed up, so when you use your saved up money, you should update the saving category with the amount as a negative number and register that amount as a spending.
 
 ![summary](https://user-images.githubusercontent.com/64603095/109706318-1657d600-7b99-11eb-8e29-cc45b16cf334.png)
 
