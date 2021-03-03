@@ -10,7 +10,7 @@ It takes about a minute an evening to keep your budget updated. Also, `eco` scra
 
 ## Installation
 
-Before installing, make sure you've added `pip` to your local __environment variable__.
+Before installing, make sure you've added `pip` to your local __environment variable__. If you haven't, you will probably be notified during installation. Doing so allows `eco` to be a bash command. 
 
 `pip install eco-cli`
 
